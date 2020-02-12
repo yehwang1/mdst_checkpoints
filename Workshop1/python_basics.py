@@ -70,18 +70,11 @@ def part4a(filename, username, password):
     on the second line.
     """
 
-    byte1 = username.encode('ascii')
-    base64_1 = base64.b64encode(byte1)
-    base64_username = base64_1.decode('ascii')
-
-
-    byte2 = password.encode('ascii')
-    base64_2 = base64.b64encode(byte2)
-    base64_password = base64_2.decode('ascii')
-
+    user1 = base64.b64encode(username.encode('utf-8'))
+    pass1 = base64.b64encode(password.encode('utf-8'))
     output = open(filename,"w+")
-    output.write(base64_username + "\n")
-    output.write(base64_password)
+    output.write(str(user1,"utf-8") + "\n")
+    output.write(str(pass1,"utf-8"))
     output.close()
     
 
@@ -94,6 +87,28 @@ def part4b(filename, password=None):
     Print out the decrypted username and password.
     If a password is specified, update the file with the new password.
     """
+    with open(filename,'r') as file:
+        username = file.readline()
+        password1 = file.readline()
+
+    username += "==="
+    username = base64.b64decode(username.encode('ascii')).decode('ascii')
+    print("Username = ", username)
+
+    password1 += "==="
+    password1 = base64.b64decode(password1.encode('ascii')).decode('ascii')
+    print("Password = ", password1)
+    
+    user_encode = base64.b64encode(username.encode('utf-8'))
+    if (password != None):
+        password1_encode = base64.b64encode(password.encode('utf-8'))
+    else:
+        password1_encode = base64.b64encode(password1.encode('utf-8'))
+        
+    output = open(filename,"w+")
+    output.write(str(user_encode,"utf-8"))
+    output.write('\n')
+    output.write(str(password1_encode,"utf-8"))
 
 
 
